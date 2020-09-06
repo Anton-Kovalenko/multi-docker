@@ -11,15 +11,15 @@ script:
   - docker run -e CI=true antonkovalenko/react-test npm test
 
 after_success:
-  - docker build -t antonkovalenko/multi-client ./client
-  - docker build -t antonkovalenko/multi-client ./nginx
-  - docker build -t antonkovalenko/multi-client ./server
-  - docker build -t antonkovalenko/multi-client ./worker
+  - docker build -t akovalenko/multi-client ./client
+  - docker build -t akovalenko/multi-nginx ./nginx
+  - docker build -t akovalenko/multi-server ./server
+  - docker build -t akovalenko/multi-worker ./worker
   #Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   #Take those images and put them to docker hub
-  - docker push antonkovalenko/multi-client
-  - docker push antonkovalenko/multi-nginx
-  - docker push antonkovalenko/multi-server
-  - docker push antonkovalenko/multi-worker
+  - docker push akovalenko/multi-client
+  - docker push akovalenko/multi-nginx
+  - docker push akovalenko/multi-server
+  - docker push akovalenko/multi-worker
 
