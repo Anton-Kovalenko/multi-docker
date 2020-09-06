@@ -1,0 +1,23 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t akovalenko/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run akovalenko/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t akovalenko/multi-client ./client
+  - docker build -t akovalenko/multi-client ./nginx
+  - docker build -t akovalenko/multi-client ./server
+  - docker build -t akovalenko/multi-client ./worker
+  #Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  #Take those images and put them to docker hub
+  - docker push akovalenko/multi-client
+  - docker push akovalenko/multi-nginx
+  - docker push akovalenko/multi-server
+  - docker push akovalenko/multi-worker
+
